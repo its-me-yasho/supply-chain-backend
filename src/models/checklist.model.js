@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
+const { MODEL_NAMES, ANSWER_TYPES } = require("../config/constants");
 
 const questionSchema = new mongoose.Schema(
   {
     question: { type: String, required: true },
     type: {
       type: String,
-      enum: ["boolean", "single_choice", "multiple_choice", "text", "image", "dropdown"],
+      enum: Object.values(ANSWER_TYPES),
       required: true,
     },
     options: [String], // for choice/dropdown types
@@ -17,12 +18,18 @@ const questionSchema = new mongoose.Schema(
 const checklistSchema = new mongoose.Schema(
   {
     title: { type: String, required: true },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    ubdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER, required: true },
+    ubdatedBy: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER},
     questions: [questionSchema],
-    linkedClientId: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // if reused
+    responses: [
+      {
+        question: String,
+        answer: mongoose.Schema.Types.Mixed, // Can be string, boolean, array, image URL, etc.
+      }
+    ],
+    linkedClientId: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER },
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Checklist", checklistSchema);
+module.exports = mongoose.model(MODEL_NAMES.CHECKLIST, checklistSchema);

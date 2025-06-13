@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/user.model");
 const { generateToken } = require("../utils/tokenHelper");
+const { ROLES, allowedCreation } = require("../config/constants");
 
 // Login for any role
 exports.login = async (req, res) => {
@@ -26,11 +27,11 @@ exports.login = async (req, res) => {
     console.log("User found:", user);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    if (user.role === "inspection" && !isMobile) {
+    if (user.role === ROLES.INSPECTION && !isMobile) {
       return res.status(400).json({ message: "Inspection manager should login with mobile number" });
     }
 
-    if (user.role !== "inspection" && !isEmail) {
+    if (user.role !== ROLES.INSPECTION && !isEmail) {
       return res.status(400).json({ message: `Email is required for role ${user.role}` });
     }
 
@@ -42,11 +43,6 @@ exports.login = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: "Login failed", error: err.message });
   }
-};
-
-const allowedCreation = {
-  admin: ["admin","procurement", "inspection", "client"],
-  procurement: ["inspection", "client"],
 };
 
 exports.register = async (req, res) => {
@@ -72,10 +68,10 @@ exports.register = async (req, res) => {
     if (!name || !password || !role) {
       return res.status(400).json({ message: "Name, password and role are required" });
     }
-    if(!mobile && role === "inspection") {
+    if(!mobile && role === ROLES.INSPECTION) {
       return res.status(400).json({ message: "Mobile is required for inspection manager" });
     }
-    if (!email && role !== "inspection") {
+    if (!email && role !== ROLES.INSPECTION) {
       return res.status(400).json({ message: `Email is required for role ${role}` });
     }
     // Step 1: Get the creator
@@ -99,7 +95,7 @@ exports.register = async (req, res) => {
     }
 
     // Step 4: Special rule – inspection manager must not be created twice
-    if (role === "inspection") {
+    if (role === ROLES.INSPECTION) {
       const conflict = await User.findOne({ mobile });
       if (conflict) {
         return res.status(400).json({
@@ -117,7 +113,7 @@ exports.register = async (req, res) => {
       password: hash,
       role,
       createdBy: req.user.id,
-      reportTo: role === "inspection" ? req.user.id : undefined
+      reportTo: role === ROLES.INSPECTION ? req.user.id : undefined
     });
 
     await user.save();

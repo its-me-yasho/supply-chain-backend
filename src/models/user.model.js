@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ROLES, MODEL_NAMES } = require("../config/constants");
 
 const userSchema = new mongoose.Schema(
   {
@@ -8,13 +9,13 @@ const userSchema = new mongoose.Schema(
     password: { type: String, required: true },
     role: {
       type: String,
-      enum: ["admin", "procurement", "inspection", "client"],
+      enum: Object.values(ROLES),
       required: true,
     },
-    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    reportTo: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // only for inspection manager
+    createdBy: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER},
+    reportTo: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER }, // only for inspection manager
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model(MODEL_NAMES.USER, userSchema);

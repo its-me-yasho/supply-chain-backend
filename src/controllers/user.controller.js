@@ -1,11 +1,12 @@
+const { ROLES } = require("../config/constants");
 const User = require("../models/user.model");
 
 exports.getInspectorByPM = async (req, res) => {
     try {
-        if (req.user.role !== "procurement") {
+        if (req.user.role !== ROLES.PROCUREMENT) {
             return res.status(403).json({ message: "Only procurement managers can fetch inspectors" });
         }
-        const inspectors = await User.find({ role: "inspection", reportTo: req.user.id }).select("-password");
+        const inspectors = await User.find({ role: ROLES.INSPECTION, reportTo: req.user.id }).select("-password");
         res.status(200).json({ inspectors});
     }
     catch (err) {
@@ -17,12 +18,12 @@ exports.assignInspector = async (req, res) => {
     const { inspectorEmail, procurementManagerEmail } = req.body;
 
     try {
-        const inspector = await User.findOne({ email: inspectorEmail, role: "inspection" });
-        if (!inspector || inspector.role !== "inspection") {
+        const inspector = await User.findOne({ email: inspectorEmail, role: ROLES.INSPECTION });
+        if (!inspector || inspector.role !== ROLES.INSPECTION) {
             return res.status(404).json({ message: "Inspector not found or invalid role" });
         }
-        const procurementManager = await User.findOne({ email: procurementManagerEmail, role: "procurement" });
-        if (!procurementManager || procurementManager.role !== "procurement") {
+        const procurementManager = await User.findOne({ email: procurementManagerEmail, role: ROLES.PROCUREMENT });
+        if (!procurementManager || procurementManager.role !== ROLES.PROCUREMENT) {
             return res.status(404).json({ message: "Procurement manager not found or invalid role" });
         }
         inspector.reportTo = procurementManager._id;
@@ -40,8 +41,8 @@ exports.unassignInspector = async (req, res) => {
     const { inspectorEmail } = req.body;
 
     try {
-        const inspector = await User.findOne({ email: inspectorEmail, role: "inspection" });
-        if (!inspector || inspector.role !== "inspection") {
+        const inspector = await User.findOne({ email: inspectorEmail, role: ROLES.INSPECTION });
+        if (!inspector || inspector.role !== ROLES.INSPECTION) {
             return res.status(404).json({ message: "Inspector not found or invalid role" });
         }
         inspector.reportTo = null; // Unassign the inspector

@@ -2,8 +2,9 @@ const express = require("express");
 const router = express.Router();
 const checklistController = require("../controllers/checklist.controller");
 const { authenticate, authorize } = require("../middlewares/auth.middleware");
+const { ROLES } = require("../config/constants");
 
-router.post("/createOrUpdateChecklist", authenticate, authorize("procurement"), checklistController.createOrUpdateChecklistByClientEmail);
-router.get("/getClientChecklists", authenticate, authorize("procurement"), checklistController.getClientChecklists);
+router.post("/createOrUpdateChecklist", authenticate, authorize(ROLES.PROCUREMENT), checklistController.createOrUpdateChecklistByClientEmail);
+router.get("/getClientChecklists", authenticate, authorize(ROLES.PROCUREMENT), checklistController.getClientChecklists);
 
 module.exports = router;
