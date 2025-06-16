@@ -9,7 +9,6 @@ router.patch("/:id/status", authenticate, authorize(ROLES.PROCUREMENT), orderCon
 router.post("/submitChecklistAnswer", authenticate, authorize(ROLES.INSPECTION), orderController.submitChecklistAnswer);
 router.get("/:id", authenticate, authorize(ROLES.PROCUREMENT, ROLES.INSPECTION), orderController.getOrderById);
 router.get("/userOrders", authenticate, authorize(ROLES.PROCUREMENT), orderController.getOrdersForUser);
-// get orders by status with query
 router.get("/status/:status", authenticate, authorize(ROLES.PROCUREMENT), orderController.getOrdersByStatus);
 
 module.exports = router;

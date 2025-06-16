@@ -40,4 +40,5 @@ export const ANSWER_TYPES = {
     IMAGE: 'image',
     DROPDOWN: 'dropdown',
     NUMBER: 'number',
+    TEXT: 'text',
 };
