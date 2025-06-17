@@ -5,7 +5,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 const { ROLES } = require("../config/constants");
 
 router.post("/createOrder", authenticate, authorize(ROLES.PROCUREMENT),orderController.createOrder);
-router.patch("/:id/status", authenticate, authorize(ROLES.PROCUREMENT), orderController.updateOrderStatus);
+router.patch("/updateStatus/:id", authenticate, authorize(ROLES.PROCUREMENT), orderController.updateOrderStatus);
 router.post("/submitChecklistAnswer", authenticate, authorize(ROLES.INSPECTION), orderController.submitChecklistAnswer);
 router.get("/:id", authenticate, authorize(ROLES.PROCUREMENT, ROLES.INSPECTION), orderController.getOrderById);
 router.get("/userOrders", authenticate, authorize(ROLES.PROCUREMENT), orderController.getOrdersForUser);

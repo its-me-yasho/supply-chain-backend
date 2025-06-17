@@ -24,7 +24,6 @@ exports.login = async (req, res) => {
         { mobile: isMobile ? identifier : "" }
       ]
     })
-    console.log("User found:", user);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     if (user.role === ROLES.INSPECTION && !isMobile) {

@@ -24,7 +24,8 @@ export const MODEL_NAMES = {
     USER: 'User',
     ORDER: 'Order',
     CHECKLIST: 'Checklist',
-    CHECKLIST_ANSWER: 'ChecklistAnswer'
+    CHECKLIST_ANSWER: 'ChecklistAnswer',
+    CHARECTER: 'Charecter'
 };
 
 export const allowedCreation = {

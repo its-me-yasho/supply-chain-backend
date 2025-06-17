@@ -10,13 +10,13 @@ exports.createOrder = async (req, res) => {
   try {
     const client = await User.findOne({ email: clientEmail, role: ROLES.CLIENT });
     const inspectionManager = await User.findOne({ email: inspectionManagerEmail, role: ROLES.INSPECTION });
-    const checklist = await Checklist.findOne({ linkedClientId: client._id });
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
     if (!inspectionManager) {
       return res.status(404).json({ message: "Inspection manager not found" });
     }
+    const checklist = await Checklist.findOne({ linkedClientId: client._id });
     if (!checklist) {
       return res.status(404).json({ message: "Checklist not found for this client" });
     }
