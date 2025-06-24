@@ -1,9 +1,7 @@
-// Application constants
 export const APP_NAME = 'Supply Chain Backend';
 
 export const JWT_EXPIRES_IN = '7d';
 
-// Status Codes
 export const ORDER_STATUSES = {
     CREATED: 'created',
     INSPECTION_PENDING: 'inspection_pending',
@@ -12,7 +10,6 @@ export const ORDER_STATUSES = {
     COMPLETED: 'completed',
 };
 
-// User Roles
 export const ROLES = {
     ADMIN: 'admin',
     PROCUREMENT: 'procurement',

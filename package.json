@@ -4,8 +4,11 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/server.js",
-    "dev": "nodemon src/server.js"
+    "start:dev": "NODE_ENV=development node src/server.js",
+    "start:prod": "NODE_ENV=production node src/server.js",
+    "dev": "NODE_ENV=development nodemon src/server.js",
+    "seed:prod:admin": "NODE_ENV=production node src/seeder/seed.js",
+    "seed:dev:admin": "NODE_ENV=development node src/seeder/seed.js"
   },
   "keywords": [],
   "author": "",

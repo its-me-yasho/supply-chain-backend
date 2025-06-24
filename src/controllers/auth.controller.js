@@ -3,7 +3,6 @@ const User = require("../models/user.model");
 const { generateToken } = require("../utils/tokenHelper");
 const { ROLES, allowedCreation } = require("../config/constants");
 
-// Login for any role
 exports.login = async (req, res) => {
   const { identifier, password } = req.body;
 
@@ -47,11 +46,11 @@ exports.login = async (req, res) => {
 exports.register = async (req, res) => {
   const {
     name,
-    email = "", // email is optional
-    mobile = "", // mobile is optional
+    email = "",
+    mobile = "",
     password,
     role,
-    procurementManager, // only for inspection manager
+    procurementManager,
   } = req.body;
 
   try {
@@ -73,11 +72,9 @@ exports.register = async (req, res) => {
     if (!email && role !== ROLES.INSPECTION) {
       return res.status(400).json({ message: `Email is required for role ${role}` });
     }
-    // Step 1: Get the creator
     const creator = await User.findById(req.user.id);
     if (!creator) return res.status(400).json({ message: "Creator not found" });
 
-    // Step 2: Validate role creation permission
     const canCreate = allowedCreation[creator.role] || [];
     if (!canCreate.includes(role)) {
       return res.status(403).json({
@@ -93,7 +90,6 @@ exports.register = async (req, res) => {
         .json({ message: "User already exists. Contact admin." });
     }
 
-    // Step 4: Special rule – inspection manager must not be created twice
     if (role === ROLES.INSPECTION) {
       const conflict = await User.findOne({ mobile });
       if (conflict) {
@@ -103,7 +99,6 @@ exports.register = async (req, res) => {
       }
     }
 
-    // Step 5: Hash password and save
     const hash = await bcrypt.hash(password, 10);
     const user = new User({
       name,
@@ -111,8 +106,8 @@ exports.register = async (req, res) => {
       mobile : mobile ? mobile : undefined,
       password: hash,
       role,
-      createdBy: req.user.id,
-      reportTo: role === ROLES.INSPECTION ? req.user.id : undefined
+      createdBy: role !== ROLES.ADMIN ? req.user.id : undefined,
+      reportTo: role === ROLES.INSPECTION && !procurementManager ? req.user?.id : procurementManager,
     });
 
     await user.save();
@@ -121,4 +116,3 @@ exports.register = async (req, res) => {
     res.status(500).json({ message: "Error during registration", error: err.message });
   }
 };
-

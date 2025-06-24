@@ -74,7 +74,6 @@ exports.submitChecklistAnswer = async (req, res) => {
       return res.status(400).json({ message: "Order is not in inspection pending status" });
     }
 
-    // Validate required questions
     const validation = exports.validateChecklistSchema(order.checklist, responses);
     if (!validation.valid) {
       return res.status(400).json({ message: validation.message });
@@ -91,8 +90,6 @@ exports.submitChecklistAnswer = async (req, res) => {
   }
 };
 
-
-// fuction to validate the checklist schema with provided answers like question, type, options, required
 exports.validateChecklistSchema = (checklist, responses) => {
   const responseMap = new Map(responses.map(r => [r.question, r.answer]));
 
@@ -125,7 +122,6 @@ exports.validateChecklistSchema = (checklist, responses) => {
   return { valid: true };
 };
 
-//get order by id
 exports.getOrderById = async (req, res) => {
   const { id } = req.params;
 
@@ -144,7 +140,6 @@ exports.getOrderById = async (req, res) => {
   }
 };
 
-// Get all orders with respect to status
 exports.getOrdersByStatus = async (req, res) => {
   const { status } = req.query;
 
@@ -161,7 +156,6 @@ exports.getOrdersByStatus = async (req, res) => {
   }
 };
 
-// Get all orders for a user
 exports.getOrdersForUser = async (req, res) => {
   const user = req.user;
 
@@ -183,4 +177,3 @@ exports.getOrdersForUser = async (req, res) => {
     res.status(500).json({ message: "Error fetching orders", error: error.message });
   }
 };
-

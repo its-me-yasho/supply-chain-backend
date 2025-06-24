@@ -33,3 +33,9 @@ const checklistSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model(MODEL_NAMES.CHECKLIST, checklistSchema);
+
+
+
+
+
+

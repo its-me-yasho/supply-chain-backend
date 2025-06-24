@@ -7,7 +7,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 router.post("/login", authController.login);
 
 // Register: only authenticated creators can register someone
-router.post("/register", authenticate, authController.register);
+router.post("/register", authController.register);
 
 
 module.exports = router;

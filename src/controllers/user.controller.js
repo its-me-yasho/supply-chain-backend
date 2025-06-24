@@ -45,7 +45,7 @@ exports.unassignInspector = async (req, res) => {
         if (!inspector || inspector.role !== ROLES.INSPECTION) {
             return res.status(404).json({ message: "Inspector not found or invalid role" });
         }
-        inspector.reportTo = null; // Unassign the inspector
+        inspector.reportTo = null;
         await inspector.save();
 
         res.status(200).json({ message: "Inspector unassigned successfully", inspector });
