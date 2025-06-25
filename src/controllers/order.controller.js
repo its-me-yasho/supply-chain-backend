@@ -157,14 +157,15 @@ exports.getOrdersByStatus = async (req, res) => {
 };
 
 exports.getOrdersForUser = async (req, res) => {
-  const user = req.user;
-
+  
   try {
+    console.log("Fetching orders for user", req.user);
+    const user = req.user;
     const orders = await Order.find({
       $or: [
-        { client: user._id },
-        { procurementManager: user._id },
-        { inspectionManager: user._id }
+        { client: user.id },
+        { procurementManager: user.id },
+        { inspectionManager: user.id }
       ]
     })
       .populate("client", "name email")

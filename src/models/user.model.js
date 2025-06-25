@@ -13,7 +13,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER},
-    reportTo: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER }, // only for inspection manager
+    reportTo: { type: mongoose.Schema.Types.ObjectId, ref: MODEL_NAMES.USER },
   },
   { timestamps: true }
 );

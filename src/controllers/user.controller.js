@@ -14,6 +14,23 @@ exports.getInspectorByPM = async (req, res) => {
     } 
 };
 
+exports.getInspectorByEmail = async (req, res) => {
+    const { email } = req.query;
+
+    try {
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
+        const inspector = await User.findOne({ email, role: ROLES.INSPECTION }).select("-password").populate("reportTo", "name email role");
+        if (!inspector) {
+            return res.status(404).json({ message: "Inspector not found" });
+        }
+        res.status(200).json({ inspector });
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching inspector", error: error.message });
+    }
+};
+
 exports.assignInspector = async (req, res) => {
     const { inspectorEmail, procurementManagerEmail } = req.body;
 

@@ -55,10 +55,10 @@ exports.createOrUpdateChecklistByClientEmail = async (req, res) => {
     }
 };
 
-exports.getChecklistsByProcurementManager = async (req, res) => {
+exports.getChecklistsByLoggedPM = async (req, res) => {
   const user = req.user;
   try {
-    const checklists = await Checklist.find({ createdBy: user.id });
+    const checklists = await Checklist.find({ createdBy: user.id }).populate('linkedClientId', 'name email role');
     if (!checklists || checklists.length === 0) {
       return res.status(404).json({ message: "No checklists found for this user" });
     }
@@ -79,7 +79,7 @@ exports.getClientChecklists = async (req, res) => {
     if (!client) {
       return res.status(404).json({ message: "Client not found" });
     }
-    const checklists = await Checklist.find({ linkedClientId: client._id });
+    const checklists = await Checklist.find({ linkedClientId: client._id }).populate('linkedClientId', 'name email role');
     res.status(200).json({ checklists });
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch checklists", error: err.message });

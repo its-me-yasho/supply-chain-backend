@@ -5,6 +5,7 @@ const { authenticate, authorize } = require("../middlewares/auth.middleware");
 const { ROLES } = require("../config/constants");
 
 router.get("/getInspector", authenticate, authorize(ROLES.PROCUREMENT), userController.getInspectorByPM);
-router.post("/assignProcManager", authenticate, authorize(ROLES.ADMIN), userController.assignInspector);
-router.post("/unassignProcManager", authenticate, authorize(ROLES.ADMIN), userController.unassignInspector);
+router.get("/getInspectorByEmail", authenticate, authorize(ROLES.ADMIN), userController.getInspectorByEmail);
+router.patch("/assignProcManager", authenticate, authorize(ROLES.ADMIN), userController.assignInspector);
+router.patch("/unassignProcManager", authenticate, authorize(ROLES.ADMIN), userController.unassignInspector);
 module.exports = router;

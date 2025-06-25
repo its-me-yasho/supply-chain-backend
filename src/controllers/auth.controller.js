@@ -43,6 +43,7 @@ exports.login = async (req, res) => {
   }
 };
 
+
 exports.register = async (req, res) => {
   const {
     name,
@@ -72,6 +73,7 @@ exports.register = async (req, res) => {
     if (!email && role !== ROLES.INSPECTION) {
       return res.status(400).json({ message: `Email is required for role ${role}` });
     }
+    console.log("user", req.user);
     const creator = await User.findById(req.user.id);
     if (!creator) return res.status(400).json({ message: "Creator not found" });
 
@@ -106,7 +108,7 @@ exports.register = async (req, res) => {
       mobile : mobile ? mobile : undefined,
       password: hash,
       role,
-      createdBy: role !== ROLES.ADMIN ? req.user.id : undefined,
+      createdBy: req.user.id,
       reportTo: role === ROLES.INSPECTION && !procurementManager ? req.user?.id : procurementManager,
     });
 
